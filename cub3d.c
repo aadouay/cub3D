@@ -1,0 +1,53 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cub3d.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ayadouay <ayadouay@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/09 10:18:55 by eelkabia          #+#    #+#             */
+/*   Updated: 2025/09/09 11:25:36 by ayadouay         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "includes/cub3d.h"
+
+int	validate_file(char *filename)
+{
+	int	fd;
+	int	len;
+
+	if (!filename)
+		(print_error("No filename provided"), exit(1));
+	len = ft_strlen(filename);
+	if (len < 4 || ft_strncmp(filename + len - 4, ".cub", 4) != 0)
+		(print_error("Map file must have .cub extension"), exit(1));
+	fd = open(filename, O_RDONLY);
+	if (fd < 0)
+		(print_error("Cannot open map file"), exit(1));
+	close(fd);
+	return (1);
+}
+
+int	main(int argc, char **argv)
+{
+	t_game	data;
+
+	if (argc != 2)
+	{
+		print_error("Usage: ./cub3D <map_file.cub>");
+		exit(1);
+	}
+	if (!validate_file(argv[1]))
+		return (1);
+	init_game(&data);
+	parser_file(argv[1], &data);
+	set_player_direction(&data);
+	init_minilibx(&data);
+	load_textures(&data);
+	mlx_hook(data.mlx.win_ptr, 2, 1L << 0, key_press, &data);
+	mlx_hook(data.mlx.win_ptr, 3, 1L << 1, key_release, &data);
+	mlx_hook(data.mlx.win_ptr, 17, 1L << 17, close_window, &data);
+	mlx_loop_hook(data.mlx.mlx_ptr, game_loop, &data);
+	mlx_loop(data.mlx.mlx_ptr);
+}

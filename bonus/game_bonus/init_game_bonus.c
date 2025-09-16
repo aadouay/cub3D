@@ -1,0 +1,76 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init_game_bonus.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eelkabia <eelkabia@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/13 12:20:18 by eelkabia          #+#    #+#             */
+/*   Updated: 2025/09/06 12:00:02 by eelkabia         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../includes_bonus/cub3d_bonus.h"
+
+void	init_map(t_map *map)
+{
+	map->grid = NULL;
+	map->height = 0;
+	map->width = 0;
+	map->floor.r = -1;
+	map->floor.g = -1;
+	map->floor.b = -1;
+	map->ceiling.r = -1;
+	map->ceiling.g = -1;
+	map->ceiling.b = -1;
+	map->doors = NULL;
+	map->door_count = 0;
+}
+
+void	init_player(t_player *player)
+{
+	player->pos.x = 0;
+	player->pos.y = 0;
+	player->dir.x = 0;
+	player->dir.y = 0;
+	player->plane.x = 0;
+	player->plane.y = 0;
+	player->move_speed = 0.02;
+	player->rot_speed = 0.04;
+}
+
+void	init_texture(t_game *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < 4)
+	{
+		data->texture[i].path = NULL;
+		data->texture[i].img = NULL;
+		data->texture[i].addr = NULL;
+		data->texture[i].width = 0;
+		data->texture[i].height = 0;
+		data->texture[i].bpp = 0;
+		data->texture[i].line_len = 0;
+		data->texture[i].endian = 0;
+		i++;
+	}
+	data->door_texture.path = NULL;
+	data->door_texture.img = NULL;
+	data->door_texture.addr = NULL;
+	data->door_texture.width = 0;
+	data->door_texture.height = 0;
+	data->door_texture.bpp = 0;
+	data->door_texture.line_len = 0;
+	data->door_texture.endian = 0;
+}
+
+void	init_game(t_game *data)
+{
+	ft_bzero(data, sizeof(t_game));
+	init_map(&data->map);
+	init_player(&data->player);
+	init_texture(data);
+	ft_bzero(&data->keys, sizeof(t_keys));
+}
